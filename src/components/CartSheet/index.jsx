@@ -2,15 +2,28 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button.jsx';
 import CartItem from "@/components/CartItem/index.jsx";
 import PropTypes from "prop-types";
+import {useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {getCartSlice} from "@/store/cartSlice/index.jsx";
 
 CartSheet.propTypes = {
     open: PropTypes.bool,
     setOpen: PropTypes.func,
-    cartItems: PropTypes.array,
-    totalPrice: PropTypes.number,
 }
 
-function CartSheet({ open, setOpen, cartItems, totalPrice}) {
+function CartSheet({ open, setOpen}) {
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+    const { cartItems } = useSelector((state) => state.cart);
+    const totalPrice = cartItems?.reduce((acc, item) =>
+        acc + (item.productId.salePrice > 0 ? item.productId.salePrice : item.productId.price) * item.quantity, 0);
+
+    useEffect(() => {
+        if (user) {
+            dispatch(getCartSlice(user.id));
+        }
+    }, [user, dispatch]);
+
     return (
         <>
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
@@ -18,15 +31,15 @@ function CartSheet({ open, setOpen, cartItems, totalPrice}) {
                     <SheetHeader>
                         <SheetTitle>Your cart</SheetTitle>
                     </SheetHeader>
-                    {cartItems.length > 0 ? (
+                    {cartItems && cartItems.length > 0 ? (
                         <>
                             <div className="mt-8 space-y-4">
                                 {cartItems.length > 0 && cartItems.map((item) => <CartItem key={item.productId._id} cartItem={item} />)}
                             </div>
                             <div className="mt-8 space-y-4">
                                 <div className="flex justify-between">
-                                    <span className="font-bold">Total</span>
-                                    <span className="font-bold">${totalPrice}</span>
+                                    <span className="font-bold text-xl">Total</span>
+                                    <span className="font-bold text-xl">${totalPrice}</span>
                                 </div>
                             </div>
                             <Button

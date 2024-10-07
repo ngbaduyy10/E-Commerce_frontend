@@ -3,10 +3,9 @@ import { Badge } from "@/components/ui/badge.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import PropTypes from "prop-types";
 import { categoryOptionsMap, brandOptionsMap } from "@/utils/index.jsx";
-import { addToCart } from "@/services/cart.service.jsx";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import { useToast } from "@/hooks/use-toast.js";
-import { useState } from "react";
+import {addToCartSlice} from "@/store/cartSlice/index.jsx";
 
 ShoppingProductCard.propTypes = {
     product: PropTypes.object,
@@ -15,28 +14,28 @@ ShoppingProductCard.propTypes = {
 
 function ShoppingProductCard({ product, handleProduct }) {
     const { user } = useSelector((state) => state.auth);
+    const { loading } = useSelector((state) => state.cart);
     const { toast } = useToast();
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const handleAddToCart = async () => {
-        setLoading(true);
-        const response = await addToCart({ userId: user.id, productId: product._id });
-        if (response.success) {
+        const response = await dispatch(addToCartSlice({ userId: user.id, productId: product._id }));
+        const payload = response.payload;
+        if (payload.success) {
             toast({
-                title: response.message,
+                title: payload.message,
             })
         } else {
             toast({
-                title: response.message,
+                title: payload.message,
                 variant: "destructive",
             })
         }
-        setLoading(false);
     }
 
     return (
         <>
-            <Card className="w-full max-w-sm mx-auto hover:shadow-xl cursor-pointer">
+            <Card className="w-full max-w-sm mx-auto hover:shadow-xl transition-shadow cursor-pointer">
                 <div onClick={() => handleProduct(product)}>
                     <div className="relative">
                         <img

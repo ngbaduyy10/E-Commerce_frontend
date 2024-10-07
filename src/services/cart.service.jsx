@@ -31,3 +31,17 @@ export const updateCart = async (data) => {
     );
     return response.data;
 }
+
+export const deleteCart = async (data) => {
+    const response = await axios.patch(
+        `${BASE_URL}/cart/delete`,
+        data,
+        {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+
+    return response.data;
+}

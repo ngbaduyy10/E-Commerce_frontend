@@ -7,9 +7,9 @@ import { Separator } from "@/components/ui/separator.jsx";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar.jsx";
 import StarRating from "@/components/StarRating/index.jsx";
 import {useState} from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {useToast} from "@/hooks/use-toast.js";
-import {addToCart} from "@/services/cart.service.jsx";
+import {addToCartSlice} from "@/store/cartSlice/index.jsx";
 
 ProductDetailDialog.propTypes = {
     open: PropTypes.bool,
@@ -21,8 +21,9 @@ ProductDetailDialog.propTypes = {
 
 function ProductDetailDialog({ open, setOpen, product, setProduct, reviews }) {
     const { user } = useSelector((state) => state.auth);
+    const { loading } = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
     const { toast } = useToast();
-    const [loading, setLoading] = useState(false);
     const [rating, setRating] = useState(0);
     const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length || 0;
 
@@ -33,22 +34,22 @@ function ProductDetailDialog({ open, setOpen, product, setProduct, reviews }) {
     const handleCloseDialog = () => {
         setOpen(false);
         setProduct(null);
+        setRating(0);
     }
 
     const handleAddToCart = async () => {
-        setLoading(true);
-        const response = await addToCart({ userId: user.id, productId: product._id });
-        if (response.success) {
+        const response = await dispatch(addToCartSlice({ userId: user.id, productId: product._id }));
+        const payload = response.payload;
+        if (payload.success) {
             toast({
-                title: response.message,
+                title: payload.message,
             })
         } else {
             toast({
-                title: response.message,
+                title: payload.message,
                 variant: "destructive",
             })
         }
-        setLoading(false);
     }
 
     return (

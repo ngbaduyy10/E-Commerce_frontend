@@ -10,15 +10,12 @@ import {Label} from "@/components/ui/label.jsx";
 import {userLogout} from "@/store/authSlice/index.jsx";
 import {useState} from "react";
 import CartSheet from "@/components/CartSheet/index.jsx";
-import {getCart} from "@/services/cart.service.jsx";
 
 function ShoppingHeader() {
     const { user } = useSelector(state => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [cartOpen, setCartOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
 
     const handleLogout = async () => {
         await dispatch(userLogout());
@@ -26,13 +23,6 @@ function ShoppingHeader() {
 
     const handleOpenCart = async () => {
         setCartOpen(true);
-        const response = await getCart(user.id);
-        if (response.success) {
-            setCartItems(response.data.items);
-            setTotalPrice(response.data.items.reduce((acc, item) =>
-                acc + (item.productId.salePrice > 0 ? item.productId.salePrice : item.productId.price) * item.quantity, 0)
-            );
-        }
     }
 
     return (
@@ -131,7 +121,7 @@ function ShoppingHeader() {
                     </div>
                 </div>
             </header>
-            <CartSheet open={cartOpen} setOpen={setCartOpen} cartItems={cartItems} totalPrice={totalPrice} />
+            <CartSheet open={cartOpen} setOpen={setCartOpen} />
         </>
     );
 }

@@ -2,8 +2,8 @@ import { Trash, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/hooks/use-toast.js";
 import PropTypes from "prop-types";
-import {updateCart} from "@/services/cart.service.jsx";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {updateCartSlice, deleteCartSlice} from "@/store/cartSlice/index.jsx";
 
 CartItem.propTypes = {
     cartItem: PropTypes.object,
@@ -12,16 +12,21 @@ CartItem.propTypes = {
 function CartItem({ cartItem }) {
     const { toast } = useToast();
     const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
 
     const updateItemQuantity = async (quantity) => {
-        console.log(cartItem.productId)
-        const response = await updateCart({ userId: user.id, productId: cartItem.productId, quantity });
-        if (!response.success) {
+        const response = await dispatch(updateCartSlice({ userId: user.id, productId: cartItem.productId._id, quantity }));
+        const payload = response.payload;
+        if (!payload.success) {
             toast({
                 title: response.message,
                 variant: "destructive",
             })
         }
+    }
+
+    const handleDeleteItem = async () => {
+        await dispatch(deleteCartSlice({ userId: user.id, productId: cartItem.productId._id }));
     }
 
     return (
@@ -63,6 +68,7 @@ function CartItem({ cartItem }) {
                         <Trash
                             className="cursor-pointer mt-1"
                             size={20}
+                            onClick={handleDeleteItem}
                         />
                     </div>
                 </div>
