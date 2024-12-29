@@ -12,6 +12,7 @@ import {useState} from "react";
 import CartSheet from "@/components/CartSheet/index.jsx";
 
 function ShoppingHeader() {
+    const { cartItems } = useSelector(state => state.cart);
     const { user } = useSelector(state => state.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ function ShoppingHeader() {
         <>
             <header className="sticky top-0 z-40 w-full border-b bg-background md:py-1">
                 <div className="flex h-16 items-center justify-between px-4 md:px-6">
-                    <Link to="/shop/home" className="flex items-center gap-2">
+                    <Link to="/home" className="flex items-center gap-2">
                         <HousePlug className="h-6 w-6"/>
                         <span className="text-xl font-bold">E-Commerce</span>
                     </Link>
@@ -43,6 +44,9 @@ function ShoppingHeader() {
 
                     <div className="flex items-center gap-4 lg:hidden">
                         <ShoppingCart className="w-6 h-6 cursor-pointer" onClick={handleOpenCart}/>
+                        <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+                            {cartItems?.length || 0}
+                        </span>
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -54,7 +58,8 @@ function ShoppingHeader() {
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Avatar className="mb-4 ml-4">
-                                                <AvatarFallback className="bg-black text-white font-extrabold cursor-pointer">
+                                                <AvatarFallback
+                                                    className="bg-black text-white font-extrabold cursor-pointer">
                                                     {user?.userName[0].toUpperCase()}
                                                 </AvatarFallback>
                                             </Avatar>
@@ -62,7 +67,8 @@ function ShoppingHeader() {
                                         <DropdownMenuContent className="w-56">
                                             <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
                                             <DropdownMenuSeparator/>
-                                            <DropdownMenuItem className="cursor-pointer">
+                                            <DropdownMenuItem className="cursor-pointer"
+                                                              onClick={() => navigate("/account")}>
                                                 <UserCog className="mr-2 h-4 w-4"/>
                                                 Account
                                             </DropdownMenuItem>
@@ -85,7 +91,7 @@ function ShoppingHeader() {
                                         className="flex items-center gap-2 py-2 px-4 hover:bg-muted rounded"
                                         onClick={() => navigate("/listing")}
                                     >
-                                        <Store />
+                                        <Store/>
                                         <Label className="text-xl font-medium cursor-pointer">Shop</Label>
                                     </div>
                                 </div>
@@ -95,7 +101,9 @@ function ShoppingHeader() {
 
                     <div className="hidden lg:flex items-center gap-4">
                         <ShoppingCart className="w-6 h-6 cursor-pointer" onClick={handleOpenCart}/>
-
+                        <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+                            {cartItems?.length || 0}
+                        </span>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Avatar className="bg-black">
@@ -107,7 +115,7 @@ function ShoppingHeader() {
                             <DropdownMenuContent className="w-56">
                                 <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
                                 <DropdownMenuSeparator/>
-                                <DropdownMenuItem className="cursor-pointer">
+                                <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/account")}>
                                     <UserCog className="mr-2 h-4 w-4"/>
                                     Account
                                 </DropdownMenuItem>
@@ -121,7 +129,7 @@ function ShoppingHeader() {
                     </div>
                 </div>
             </header>
-            <CartSheet open={cartOpen} setOpen={setCartOpen} />
+            <CartSheet open={cartOpen} setOpen={setCartOpen}/>
         </>
     );
 }

@@ -115,7 +115,11 @@ function Listing() {
                     {productList?.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
                             {productList.map((product) => (
-                                <ShoppingProductCard key={product._id} product={product} handleProduct={handleProduct}/>
+                                <ShoppingProductCard
+                                    key={product._id}
+                                    product={product}
+                                    handleProduct={handleProduct}
+                                />
                             ))}
                         </div>
                     )}

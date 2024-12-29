@@ -14,6 +14,8 @@ import Account from "@/pages/Shopping/Account/index.jsx";
 import Unauthorized from "@/pages/Unauthorized/index.jsx";
 import NotFound from "@/pages/NotFound/index.jsx";
 import AuthCheck from "@/components/AuthCheck/index.jsx";
+import PaymentSuccess from "@/pages/Shopping/PaymentSuccess/index.jsx";
+import Search from "@/pages/Shopping/Search/index.jsx";
 
 const routes = (isAuth, user) => {
     return [
@@ -81,6 +83,14 @@ const routes = (isAuth, user) => {
                 {
                     path: "/account",
                     element: <Account />
+                },
+                {
+                    path: "/search",
+                    element: <Search />
+                },
+                {
+                    path: "/payment-success",
+                    element: <PaymentSuccess />
                 }
             ]
         },

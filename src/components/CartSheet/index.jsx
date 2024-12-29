@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {getCartSlice} from "@/store/cartSlice/index.jsx";
+import {useNavigate} from "react-router-dom";
 
 CartSheet.propTypes = {
     open: PropTypes.bool,
@@ -13,6 +14,7 @@ CartSheet.propTypes = {
 
 function CartSheet({ open, setOpen}) {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
     const { cartItems } = useSelector((state) => state.cart);
     const totalPrice = cartItems?.reduce((acc, item) =>
@@ -45,6 +47,7 @@ function CartSheet({ open, setOpen}) {
                             <Button
                                 onClick={() => {
                                     setOpen(false);
+                                    navigate("/checkout")
                                 }}
                                 className="w-full mt-6"
                             >

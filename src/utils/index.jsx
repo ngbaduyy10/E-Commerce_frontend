@@ -73,3 +73,40 @@ export const brandsIcon = [
     { id: "zara", label: "Zara", icon: Images },
     { id: "h&m", label: "H&M", icon: Heater },
 ];
+
+export const addressForm = [
+    {
+        label: "Address",
+        name: "address",
+        componentType: "input",
+        type: "text",
+        placeholder: "Enter your address",
+    },
+    {
+        label: "City",
+        name: "city",
+        componentType: "input",
+        type: "text",
+        placeholder: "Enter your city",
+    },
+    {
+        label: "Pin Code",
+        name: "pinCode",
+        componentType: "input",
+        type: "text",
+        placeholder: "Enter your pin code",
+    },
+    {
+        label: "Phone",
+        name: "phone",
+        componentType: "input",
+        type: "text",
+        placeholder: "Enter your phone number",
+    },
+    {
+        label: "Notes",
+        name: "notes",
+        componentType: "textarea",
+        placeholder: "Enter any additional notes",
+    },
+];

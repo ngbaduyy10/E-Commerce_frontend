@@ -3,6 +3,7 @@ import { BASE_URL } from "@/utils/index.jsx";
 
 export const getCart = async (id) => {
     const response = await axios.get(`${BASE_URL}/cart/${id}`);
+    console.log(response.data);
     return response.data;
 }
 
@@ -43,5 +44,10 @@ export const deleteCart = async (data) => {
         }
     );
 
+    return response.data;
+}
+
+export const clearCart = async (id) => {
+    const response = await axios.delete(`${BASE_URL}/cart/clear/${id}`);
     return response.data;
 }
