@@ -17,6 +17,7 @@ import AdminOrderDetail from "@/components/AdminOrderDetail/index.jsx";
 function Orders() {
     const [orderList, setOrderList] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -27,7 +28,7 @@ function Orders() {
         };
 
         fetchOrders();
-    }, []);
+    }, [reload]);
 
     return (
         <Card>
@@ -68,7 +69,7 @@ function Orders() {
                                         <Button onClick={() => setDialogOpen(true)}>
                                             View Details
                                         </Button>
-                                        <AdminOrderDetail order={order} />
+                                        <AdminOrderDetail order={order} setDialogOpen={setDialogOpen} reload={reload} setReload={setReload} />
                                     </Dialog>
                                 </TableCell>
                             </TableRow>

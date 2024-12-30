@@ -128,6 +128,7 @@ function Listing() {
                     product={selectedProduct}
                     setProduct={setSelectedProduct}
                     reviews={reviews}
+                    setReviews={setReviews}
                     open={dialogOpen}
                     setOpen={setDialogOpen}
                 />

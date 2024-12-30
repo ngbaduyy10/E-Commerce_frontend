@@ -10,21 +10,24 @@ import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useToast} from "@/hooks/use-toast.js";
 import {addToCartSlice} from "@/store/cartSlice/index.jsx";
+import {addReview} from "@/services/review.service.jsx";
 
 ProductDetailDialog.propTypes = {
     open: PropTypes.bool,
     product: PropTypes.object,
     reviews: PropTypes.array,
+    setReviews: PropTypes.func,
     setOpen: PropTypes.func,
     setProduct: PropTypes.func,
 }
 
-function ProductDetailDialog({ open, setOpen, product, setProduct, reviews }) {
+function ProductDetailDialog({ open, setOpen, product, setProduct, reviews, setReviews }) {
     const { user } = useSelector((state) => state.auth);
     const { loading } = useSelector((state) => state.cart);
     const dispatch = useDispatch();
     const { toast } = useToast();
     const [rating, setRating] = useState(0);
+    const [reviewMsg, setReviewMsg] = useState("");
     const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length || 0;
 
     const handleRatingChange = (value) => {
@@ -49,6 +52,29 @@ function ProductDetailDialog({ open, setOpen, product, setProduct, reviews }) {
                 title: payload.message,
                 variant: "destructive",
             })
+        }
+    }
+
+    const handleAddReview = async () => {
+        const response = await addReview({
+            productId: product._id,
+            userId: user.id,
+            userName: user.userName,
+            rating,
+            message: reviewMsg,
+        });
+        if (response.success) {
+            setReviews([...reviews, response.data]);
+            setRating(0);
+            setReviewMsg("");
+            toast({
+                title: response.message,
+            });
+        } else {
+            toast({
+                title: response.message,
+                variant: "destructive",
+            });
         }
     }
 
@@ -143,9 +169,11 @@ function ProductDetailDialog({ open, setOpen, product, setProduct, reviews }) {
                                 </div>
                                 <Input
                                     name="reviewMsg"
+                                    value={reviewMsg}
+                                    onChange={(event) => setReviewMsg(event.target.value)}
                                     placeholder="Write a review..."
                                 />
-                                <Button>
+                                <Button disabled={reviewMsg.trim() === ""} onClick={handleAddReview}>
                                     Submit
                                 </Button>
                             </div>

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { HousePlug, Menu, ShoppingCart, UserCog, LogOut, House, Store } from "lucide-react";
+import { HousePlug, Menu, ShoppingCart, UserCog, LogOut, House, Store, Search } from "lucide-react";
 import {Button} from "@/components/ui/Button";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/Sheet";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu.jsx";
@@ -39,12 +39,13 @@ function ShoppingHeader() {
                         <div className="flex items-center gap-6">
                             <Label className="text-md font-medium cursor-pointer" onClick={() => navigate("/home")}>Home</Label>
                             <Label className="text-md font-medium cursor-pointer" onClick={() => navigate("/listing")}>Shop</Label>
+                            <Label className="text-md font-medium cursor-pointer" onClick={() => navigate("/search")}>Search</Label>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4 lg:hidden">
                         <ShoppingCart className="w-6 h-6 cursor-pointer" onClick={handleOpenCart}/>
-                        <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+                        <span className="absolute bottom-[35px] right-[70px] font-bold text-sm bg-black text-white text-center w-[18px] rounded-full">
                             {cartItems?.length || 0}
                         </span>
                         <Sheet>
@@ -94,14 +95,21 @@ function ShoppingHeader() {
                                         <Store/>
                                         <Label className="text-xl font-medium cursor-pointer">Shop</Label>
                                     </div>
+                                    <div
+                                        className="flex items-center gap-2 py-2 px-4 hover:bg-muted rounded"
+                                        onClick={() => navigate("/search")}
+                                    >
+                                        <Search/>
+                                        <Label className="text-xl font-medium cursor-pointer">Search</Label>
+                                    </div>
                                 </div>
                             </SheetContent>
                         </Sheet>
                     </div>
 
-                    <div className="hidden lg:flex items-center gap-4">
+                    <div className="relative hidden lg:flex items-center gap-4">
                         <ShoppingCart className="w-6 h-6 cursor-pointer" onClick={handleOpenCart}/>
-                        <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+                        <span className="absolute top-0 right-12 font-bold text-sm bg-black text-white text-center w-[18px] rounded-full">
                             {cartItems?.length || 0}
                         </span>
                         <DropdownMenu>

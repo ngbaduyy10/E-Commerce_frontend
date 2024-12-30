@@ -3,7 +3,6 @@ import { BASE_URL } from "@/utils/index.jsx";
 
 export const getCart = async (id) => {
     const response = await axios.get(`${BASE_URL}/cart/${id}`);
-    console.log(response.data);
     return response.data;
 }
 

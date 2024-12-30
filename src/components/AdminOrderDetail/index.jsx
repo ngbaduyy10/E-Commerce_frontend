@@ -10,9 +10,12 @@ import { useToast } from "@/hooks/use-toast.js";
 
 AdminOrderDetail.propTypes = {
     order: PropTypes.object,
+    setDialogOpen: PropTypes.func,
+    reload: PropTypes.bool,
+    setReload: PropTypes.func,
 }
 
-function AdminOrderDetail({ order }) {
+function AdminOrderDetail({ order, setDialogOpen, reload, setReload }) {
     const [formData, setFormData] = useState({
         status: order?.orderStatus,
     });
@@ -20,10 +23,17 @@ function AdminOrderDetail({ order }) {
 
     const handleUpdateStatus = async (e) => {
         e.preventDefault();
-        const response = await updateOrderStatus(order._id, formData.status);
+        const response = await updateOrderStatus(order._id, {status: formData.status});
         if (response.success) {
             toast({
                 title: response.message,
+            });
+            setDialogOpen(false);
+            setReload(!reload);
+        } else {
+            toast({
+                title: response.message,
+                variant: "destructive",
             });
         }
     }
